@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Binance Trading Bot - Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Binance Trading Bot Dashboard</h1>
+        </header>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Последние сделки</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Символ</th>
+                            <th>Тип</th>
+                            <th>Цена</th>
+                            <th>Количество</th>
+                            <th>Время</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for trade in trades %}
+                        <tr>
+                            <td>{{ trade.symbol }}</td>
+                            <td class="{{ trade.side.lower() }}">{{ trade.side }}</td>
+                            <td>${{ "%.2f"|format(trade.price) }}</td>
+                            <td>{{ trade.quantity }}</td>
+                            <td>{{ trade.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Последние сигналы</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Символ</th>
+                            <th>Стратегия</th>
+                            <th>Сигнал</th>
+                            <th>Уверенность</th>
+                            <th>Время</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for signal in signals %}
+                        <tr>
+                            <td>{{ signal.symbol }}</td>
+                            <td>{{ signal.strategy }}</td>
+                            <td class="{{ signal.signal_type.lower() }}">{{ signal.signal_type }}</td>
+                            <td>{{ "%.2f"|format(signal.confidence * 100) }}%</td>
+                            <td>{{ signal.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
