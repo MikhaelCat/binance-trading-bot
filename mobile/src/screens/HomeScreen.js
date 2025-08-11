@@ -14,7 +14,6 @@ const HomeScreen = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      // Здесь будет вызов вашего API
       const response = await axios.get('http://your-server/api/dashboard');
       setData(response.data);
     } catch (error) {
@@ -175,5 +174,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
 
 export default HomeScreen;
