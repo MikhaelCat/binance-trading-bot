@@ -1,3 +1,5 @@
+from strategies.macd_strategy import MACDStrategy
+from strategies.bollinger_strategy import BollingerBandsStrategy
 from exchanges.binance_client import BinanceClient
 from notifications.telegram_notifier import TelegramNotifier
 from strategies.rsi_strategy import RSIStrategy
@@ -6,8 +8,6 @@ from utils.logger import logger
 import time
 from strategies.ml_strategy import MLStrategy
 from ml.prediction.predictor import PricePredictor
-from strategies.macd_strategy import MACDStrategy
-from strategies.bollinger_strategy import BollingerBandsStrategy
 
 class TradingBot:
     def __init__(self):
@@ -166,4 +166,5 @@ class TradingBot:
         else:
 
             return 'HOLD'
+
 
