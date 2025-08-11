@@ -65,7 +65,7 @@ jobs:
     - name: Login to DockerHub
       uses: docker/login-action@v3
       with:
-        username: ${{ secrets.MihailCat }}
+        username: ${{ secrets.MikhaelCat }}
         password: ${{ secrets.dckr_pat_ADKtadsxBhu7l4c5wP0KJoZJPZw }}
     
     - name: Build and push
@@ -73,7 +73,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{ secrets.MihailCat }}/binance-trading-bot:latest
+        tags: ${{ secrets.MikhaelCat }}/binance-trading-bot:latest
     
     - name: Deploy to server
       uses: appleboy/ssh-action@v1.0.0
