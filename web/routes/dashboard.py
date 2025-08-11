@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Request, Depends
 from fastapi.templating import Jinja2Templates
 from database.database import get_db
 from sqlalchemy.orm import Session
 from database.models import Trade, Signal
+from fastapi import APIRouter, Request, Depends, HTMLResponse
 
 router = APIRouter(prefix="", tags=["dashboard"])
 templates = Jinja2Templates(directory="web/templates")
@@ -19,4 +19,5 @@ async def dashboard(request: Request, db: Session = Depends(get_db)):
         "request": request,
         "trades": recent_trades,
         "signals": recent_signals
+
     })
