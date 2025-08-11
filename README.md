@@ -18,7 +18,7 @@
 
 ```bash
 # Клонирование репозитория
-git clone <your-repo-url>
+git clone https://github.com/MikhaelCat/binance-trading-bot.git
 cd binance-trading-bot
 
 # Настройка .env файла
@@ -26,4 +26,5 @@ cp .env.example .env
 # Отредактируйте .env файл с вашими данными
 
 # Запуск с помощью Docker Compose
+
 docker-compose up -d
