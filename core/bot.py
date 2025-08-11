@@ -4,6 +4,8 @@ from strategies.rsi_strategy import RSIStrategy
 from config.settings import settings
 from utils.logger import logger
 import time
+from strategies.ml_strategy import MLStrategy
+from ml.prediction.predictor import PricePredictor
 
 class TradingBot:
     def __init__(self):
@@ -13,6 +15,15 @@ class TradingBot:
         self.symbol = settings.SYMBOL
         self.quantity = settings.TRADE_QUANTITY
         self.interval = settings.BINANCE_INTERVAL
+        self.ml_predictor = PricePredictor()
+        self.ml_strategy = MLStrategy()
+
+        self.strategies = {
+            'RSI': self.strategy,
+            'MACD': MACDStrategy(),
+            'Bollinger': BollingerBandsStrategy(),
+            'ML': self.ml_strategy
+        }
         
         logger.info("Trading Bot initialized")
         self.notifier.send_message("🟢 Бот запущен!")
@@ -77,7 +88,7 @@ class TradingBot:
             )
             self.notifier.send_message(message)
             
-            # Выполнение сделки 
+            # Выполнение сделки (только для тестирования)
             if signal in ['BUY', 'SELL']:
                 has_position = self.check_position()
                 
@@ -86,6 +97,26 @@ class TradingBot:
                     self.execute_trade(signal)
                 else:
                     logger.info(f"Сигнал {signal} проигнорирован: позиция уже открыта/закрыта")
+
+            # Анализ всех стратегий
+            signals = {}
+            for name, strategy in self.strategies.items():
+                analysis = strategy.analyze(data)
+                signals[name] = analysis
+                
+                # Отправка уведомления о ML предсказании
+                if name == 'ML' and analysis['signal'] != 'HOLD':
+                    ml_message = (
+                        f"🤖 ML Предсказание для {self.symbol}\n"
+                        f"Текущая цена: ${analysis['details']['current_price']}\n"
+                        f"Прогноз: ${analysis['details']['predicted_price']}\n"
+                        f"Изменение: {analysis['details']['change_percent']}%\n"
+                        f"Сигнал: {analysis['signal']} ({analysis['confidence']*100:.0f}% уверенность)"
+                    )
+                    self.notifier.send_message(ml_message)
+            
+            # Комбинированный сигнал 
+            combined_signal = self.combine_signals(signals)
             
         except Exception as e:
             error_msg = f"❌ Ошибка в стратегии: {e}"
@@ -107,5 +138,28 @@ class TradingBot:
                 error_msg = f"❌ Критическая ошибка: {e}"
                 logger.error(error_msg)
                 self.notifier.send_message(error_msg)
-
                 time.sleep(60)
+
+    def combine_signals(self, signals):
+        """Комбинирование сигналов от разных стратегий"""
+        buy_votes = 0
+        sell_votes = 0
+        total_confidence = 0
+        
+        for strategy_name, signal_data in signals.items():
+            signal = signal_data['signal']
+            confidence = signal_data['confidence']
+            
+            if 'BUY' in signal:
+                buy_votes += 1
+                total_confidence += confidence
+            elif 'SELL' in signal:
+                sell_votes += 1
+                total_confidence += confidence
+        
+        if buy_votes > sell_votes and buy_votes >= 2:
+            return 'BUY'
+        elif sell_votes > buy_votes and sell_votes >= 2:
+            return 'SELL'
+        else:
+            return 'HOLD'
