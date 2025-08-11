@@ -6,6 +6,7 @@ from utils.logger import logger
 import time
 from strategies.ml_strategy import MLStrategy
 from ml.prediction.predictor import PricePredictor
+from strategies.macd_strategy import MACDStrategy
 
 class TradingBot:
     def __init__(self):
@@ -162,4 +163,5 @@ class TradingBot:
         elif sell_votes > buy_votes and sell_votes >= 2:
             return 'SELL'
         else:
+
             return 'HOLD'
