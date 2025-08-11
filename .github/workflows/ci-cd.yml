@@ -66,14 +66,14 @@ jobs:
       uses: docker/login-action@v3
       with:
         username: ${{ secrets.MikhaelCat }}
-        password: ${{ secrets.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 }}
+        password: ${{ secrets.dckr_pat_WPrwuhAjQlkG3V74buJwA5WU0OE }}
     
     - name: Build and push
       uses: docker/build-push-action@v5
       with:
         context: .
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/binance-trading-bot:latest
+        tags: ${{ secrets.MihailCat }}/binance-trading-bot:latest
     
     - name: Deploy to server
       uses: appleboy/ssh-action@v1.0.0
