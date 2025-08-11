@@ -1,11 +1,11 @@
-from strategies.macd_strategy import MACDStrategy
-from strategies.bollinger_strategy import BollingerBandsStrategy
+import time
+from strategies.macd_strategy import MACDStrategy  
+from strategies.bollinger_strategy import BollingerBandsStrategy 
 from exchanges.binance_client import BinanceClient
 from notifications.telegram_notifier import TelegramNotifier
 from strategies.rsi_strategy import RSIStrategy
 from config.settings import settings
 from utils.logger import logger
-import time
 from strategies.ml_strategy import MLStrategy
 from ml.prediction.predictor import PricePredictor
 
@@ -22,8 +22,8 @@ class TradingBot:
 
         self.strategies = {
             'RSI': self.strategy,
-            'MACD': MACDStrategy(),
-            'Bollinger': BollingerBandsStrategy(),
+            'MACD': MACDStrategy(), 
+            'Bollinger': BollingerBandsStrategy(), 
             'ML': self.ml_strategy
         }
         
@@ -164,7 +164,4 @@ class TradingBot:
         elif sell_votes > buy_votes and sell_votes >= 2:
             return 'SELL'
         else:
-
             return 'HOLD'
-
-
