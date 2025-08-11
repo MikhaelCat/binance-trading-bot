@@ -77,7 +77,7 @@ class TradingBot:
             )
             self.notifier.send_message(message)
             
-            # Выполнение сделки (только для тестирования)
+            # Выполнение сделки 
             if signal in ['BUY', 'SELL']:
                 has_position = self.check_position()
                 
@@ -107,4 +107,5 @@ class TradingBot:
                 error_msg = f"❌ Критическая ошибка: {e}"
                 logger.error(error_msg)
                 self.notifier.send_message(error_msg)
+
                 time.sleep(60)
