@@ -1,5 +1,5 @@
 python-binance==1.0.17
-python-telegram-bot
+python-telegram-bot==20.7
 pandas==2.2.1
 ta==0.10.2
 python-dotenv==1.0.1
@@ -12,12 +12,10 @@ alembic==1.13.1
 plotly==5.19.0
 jinja2==3.1.3
 aiofiles==23.2.1
-httpx
-
-#зависимости для ML
+httpx~=0.25.2
+# Зависимости для ML
 tensorflow==2.15.0
 scikit-learn==1.4.1
 joblib==1.3.2
-
-# Для мобильного приложения 
+# Для мобильного приложения (API взаимодействие)
 requests==2.31.0
