@@ -28,7 +28,7 @@ class BacktestEngine:
         equity_curve = [self.initial_capital]
         
         for i in range(len(self.data)):
-            if i < 20:  # Пропускаем первые данные для индикаторов
+            if i < 20:  
                 continue
                 
             # Анализ текущего состояния
@@ -61,7 +61,7 @@ class BacktestEngine:
             
             equity_curve.append(self.current_capital)
         
-        # Расчет метрик
+        
         if len(self.trades) > 0:
             winning_trades = [t for t in self.trades if t['pnl'] > 0]
             losing_trades = [t for t in self.trades if t['pnl'] < 0]
@@ -90,4 +90,5 @@ class BacktestEngine:
                 'total_return': ((self.current_capital - self.initial_capital) / self.initial_capital) * 100
             })
         
+
         return results
