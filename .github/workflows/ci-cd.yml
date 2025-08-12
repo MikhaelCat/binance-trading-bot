@@ -27,26 +27,4 @@ jobs:
       run: |
         pytest tests/ -v
 
-  deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Deploy to server via SSH
-      uses: appleboy/ssh-action@v1.0.0
-      with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USERNAME }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
-        script: |
-          cd /home/${{ secrets.SERVER_USERNAME }}/binance-trading-bot
-          git pull origin main
-          pip install -r requirements.txt
-          # Перезапуск сервиса (пример с systemd)
-          # sudo systemctl restart binance-bot
-          # Или просто запуск в фоне
-          # pkill -f main.py || true
-          # nohup python main.py > bot.log 2>&1 &
+ 
