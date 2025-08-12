@@ -27,7 +27,7 @@ jobs:
       run: |
         pytest tests/ -v
 
-  build-and-deploy:
+  deploy:
     needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
@@ -35,37 +35,18 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-    
-    - name: Build Docker image
-      uses: docker/build-push-action@v5
-      with:
-        context: .
-        load: true
-        tags: binance-trading-bot:latest
-    
-    - name: Save Docker image as tar
-      run: |
-        docker save binance-trading-bot:latest | gzip > binance-trading-bot.tar.gz
-    
     - name: Deploy to server via SSH
       uses: appleboy/ssh-action@v1.0.0
       with:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SERVER_SSH_KEY }}
-        overwrite: true
-        source: "binance-trading-bot.tar.gz"
-        target: "/tmp/"
         script: |
-          cd /path/to/your/project
-          docker load -i /tmp/binance-trading-bot.tar.gz
-          # Остановка старого контейнера
-          docker stop binance-bot || true
-          docker rm binance-bot || true
-          # Запуск нового контейнера
-          docker run -d --name binance-bot \
-            --env-file .env \
-            -p 8000:8000 \
-            binance-trading-bot:latest
+          cd /home/${{ secrets.SERVER_USERNAME }}/binance-trading-bot
+          git pull origin main
+          pip install -r requirements.txt
+          # Перезапуск сервиса (пример с systemd)
+          # sudo systemctl restart binance-bot
+          # Или просто запуск в фоне
+          # pkill -f main.py || true
+          # nohup python main.py > bot.log 2>&1 &
